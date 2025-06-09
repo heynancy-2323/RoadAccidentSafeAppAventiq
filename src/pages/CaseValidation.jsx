@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import  Input  from "@/components/ui/input";
 
+
 import {
     Select,
     SelectContent,
@@ -9,6 +10,7 @@ import {
     SelectTrigger,
     SelectValue
   } from "@/components/ui/select";
+import { useEffect, useState } from "react";
   
 
 
@@ -84,8 +86,17 @@ const CaseValidation = () => {
   }, [status, severity, search]);
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Case Validation</h1>
+    <div className="p-6 h-screen flex flex-col">
+      <div className="flex justify-between items-center mb-4">
+        <div>
+          <h1 className="text-2xl font-bold">Case Validation</h1>
+          <p className="text-gray-500 text-sm">Review and validate field officer reports for accuracy and completeness</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-gray-500 text-sm">● 12 pending validations</span>
+          <Button variant="outline">Refresh</Button>
+        </div>
+      </div>
       <div className="flex flex-wrap gap-4 mb-6">
         <Select onValueChange={setStatus}>
           <SelectTrigger className="w-[180px]">
@@ -129,7 +140,7 @@ const CaseValidation = () => {
         />
       </div>
 
-      <div className="space-y-4">
+      <div className="flex-1 overflow-y-auto space-y-4">
         {reports.map((r) => (
           <div key={r.id} className="border rounded-xl p-5 shadow-sm bg-white">
             <div className="flex justify-between items-start">
@@ -170,12 +181,15 @@ const CaseValidation = () => {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-end mt-6 gap-2">
-        <Button variant="outline">Previous</Button>
-        <Button variant="default">1</Button>
-        <Button variant="outline">2</Button>
-        <Button variant="outline">3</Button>
-        <Button variant="outline">Next</Button>
+      <div className="flex justify-between items-center mt-6">
+        <p className="text-sm text-gray-500">Showing 1 to 3 of 12 reports</p>
+        <div className="flex gap-2">
+          <Button variant="outline">Previous</Button>
+          <Button variant="default">1</Button>
+          <Button variant="outline">2</Button>
+          <Button variant="outline">3</Button>
+          <Button variant="outline">Next</Button>
+        </div>
       </div>
     </div>
   );
