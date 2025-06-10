@@ -20,7 +20,7 @@ const App = () => {
     <Router>
       <div className="flex">
         <Sidebar />
-        <div className="overflow-y-auto">
+        <div className="flex-1 h-screen overflow-y-auto">
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/public-report" element={<PublicReport />} />
