@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
-  HiOutlineArrowRightOnRectangle, // Login
-  HiOutlineDocumentText, // Public Report
   HiOutlineHome, // Dashboard
+  HiOutlineDocumentText, // Public Report
   HiOutlineClipboardDocument, // Field Report
   HiOutlineCheckCircle, // Case Validation
   HiOutlineBriefcase, // Case Management
@@ -14,13 +13,13 @@ import {
   HiOutlineCog6Tooth, // Configuration
   HiOutlineChevronDown, // User dropdown
   HiOutlineXMark, // Close icon
-  HiOutlineBars3 // Menu icon
+  HiOutlineBars3, // Menu icon
+  HiOutlineArrowRightOnRectangle // Logout
 } from 'react-icons/hi2';
 
 const navItems = [
-  { label: 'Login', icon: <HiOutlineArrowRightOnRectangle />, path: '/' },
-  { label: 'Public Report', icon: <HiOutlineDocumentText />, path: '/public-report' },
   { label: 'Dashboard', icon: <HiOutlineHome />, path: '/dashboard' },
+  { label: 'Public Report', icon: <HiOutlineDocumentText />, path: '/public-report' },
   { label: 'Field Report', icon: <HiOutlineClipboardDocument />, path: '/field-report' },
   { label: 'Case Validation', icon: <HiOutlineCheckCircle />, path: '/case-validation' },
   { label: 'Case Management', icon: <HiOutlineBriefcase />, path: '/case-management' },
@@ -33,6 +32,7 @@ const navItems = [
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const [isMobile, setIsMobile] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -43,6 +43,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     window.addEventListener('resize', checkScreenSize);
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    navigate('/');
+  };
 
   // Close sidebar when clicking outside on mobile
   const handleBackdropClick = () => {
@@ -56,14 +61,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       {/* Mobile Menu Button */}
       {isMobile && (
         <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="fixed top-4 left-4 z-50 lg:hidden p-2 bg-white rounded-md shadow-md border border-gray-200"
+          onClick={() => setIsOpen(true)}
+          className="fixed top-4 left-4 z-40 p-2 rounded-md bg-white shadow-md border border-gray-200"
         >
-          {isOpen ? (
-            <HiOutlineXMark className="w-6 h-6 text-gray-600" />
-          ) : (
-            <HiOutlineBars3 className="w-6 h-6 text-gray-600" />
-          )}
+          <HiOutlineBars3 className="w-6 h-6 text-gray-600" />
         </button>
       )}
 
@@ -114,7 +115,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <NavLink
                 to={path}
                 key={label}
-                onClick={() => isMobile && setIsOpen(false)} // Close sidebar on mobile when link is clicked
+                onClick={() => isMobile && setIsOpen(false)}
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-4 py-2.5 rounded-md text-sm font-medium transition select-none outline-none focus:ring-2 focus:ring-blue-200 focus:ring-offset-1 ${
                     isActive
@@ -137,18 +138,27 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             ))}
           </nav>
         </div>
-        {/* User Section */}
-        <div className="px-4 py-3 border-t border-gray-100 flex items-center gap-3 bg-white">
-          <img
-            src="https://i.pravatar.cc/32?img=3"
-            alt="Officer Singh"
-            className="w-8 h-8 rounded-full border border-gray-200"
-          />
-          <div className="flex flex-col flex-1 min-w-0">
-            <span className="text-sm font-medium text-gray-900 leading-tight truncate">Officer Singh</span>
-            <span className="text-xs text-gray-500 leading-tight truncate">admin@radms.gov.in</span>
+        {/* User Section with Logout */}
+        <div className="px-4 py-3 border-t border-gray-100">
+          <div className="flex items-center gap-3 mb-3">
+            <img
+              src="https://i.pravatar.cc/32?img=3"
+              alt="Officer Singh"
+              className="w-8 h-8 rounded-full border border-gray-200"
+            />
+            <div className="flex flex-col flex-1 min-w-0">
+              <span className="text-sm font-medium text-gray-900 leading-tight truncate">Officer Singh</span>
+              <span className="text-xs text-gray-500 leading-tight truncate">admin@radms.gov.in</span>
+            </div>
+            <HiOutlineChevronDown className="text-gray-400 text-sm flex-shrink-0" />
           </div>
-          <HiOutlineChevronDown className="text-gray-400 text-sm flex-shrink-0" />
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+          >
+            <HiOutlineArrowRightOnRectangle className="text-lg" />
+            Logout
+          </button>
         </div>
       </aside>
     </>

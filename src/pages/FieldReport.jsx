@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import authService from '../services/authService';
+import User from '../models/User.js';
 
 export default function FieldReport() {
   const [vehicles, setVehicles] = useState([{ id: 1 }]);
@@ -24,6 +26,10 @@ export default function FieldReport() {
     verification2: false,
     digitalSignature: '',
     badgeNumber: ''
+  });
+  const [user, setUser] = useState(() => {
+    const storedUser = authService.getCurrentUser();
+    return storedUser;
   });
 
   const addVehicle = () =>
